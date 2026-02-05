@@ -1,0 +1,44 @@
+name: Update Dashboard Stats
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Toutes les 6 heures
+  workflow_dispatch:  # Permet de lancer manuellement
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Get lieux count from WordPress API
+        id: get-count
+        run: |
+          COUNT=$(curl -sI "https://dernieredispo.com/wp-json/wp/v2/lieux?per_page=1" | grep -i "x-wp-total" | awk '{print $2}' | tr -d '\r')
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+          echo "Nombre de lieux: $COUNT"
+      
+      - name: Update HTML with new count
+        run: |
+          COUNT=${{ steps.get-count.outputs.count }}
+          PERCENTAGE=$(echo "scale=1; $COUNT * 100 / 1000" | bc)
+          
+          # Update the count in JavaScript
+          sed -i "s/animateValue('lieux-count', 0, [0-9]*, 1500)/animateValue('lieux-count', 0, $COUNT, 1500)/" index.html
+          
+          # Update the "Actuel" text
+          sed -i "s/Actuel : [0-9]*/Actuel : $COUNT/" index.html
+          
+          # Update progress bar percentage
+          sed -i "s/style.width = '[0-9.]*%'/style.width = '${PERCENTAGE}%'/" index.html
+          
+          echo "Updated to $COUNT lieux (${PERCENTAGE}%)"
+      
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "📊 Auto-update: ${{ steps.get-count.outputs.count }} lieux" && git push)
