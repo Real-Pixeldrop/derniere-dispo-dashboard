@@ -260,6 +260,17 @@
             font-size: 0.85rem;
         }
         
+        /* Desktop: carte principale full width, 3 cartes en dessous */
+        @media (min-width: 769px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .stat-card.main {
+                grid-column: 1 / -1;
+            }
+        }
+        
         @media (max-width: 768px) {
             .stat-card.main {
                 grid-column: span 1;
@@ -319,7 +330,7 @@
         </div>
         
         <div class="carousel-section">
-            <h2 class="section-title">📍 Répartition géographique</h2>
+            <h2 class="section-title">Répartition géographique</h2>
             <div class="carousel-container">
                 <div class="carousel-track">
                     <div class="carousel-card">
@@ -359,7 +370,7 @@
         </div>
         
         <div class="carousel-section">
-            <h2 class="section-title">🏢 Types de lieux</h2>
+            <h2 class="section-title">Types de lieux</h2>
             <div class="carousel-container">
                 <div class="carousel-track">
                     <div class="carousel-card">
@@ -399,15 +410,12 @@
         </div>
         
         <div class="actions-section">
-            <h2 class="section-title">🎯 Prochaines actions</h2>
+            <h2 class="section-title">Prochaines actions</h2>
             <div class="action-card">
                 <ul class="action-list">
-                    <li><span class="status"></span> Cibler Lyon, Marseille, Bordeaux</li>
                     <li><span class="status"></span> Extraction base prospects (Kactus)</li>
-                    <li><span class="status"></span> Audit SEO complet</li>
                     <li><span class="status"></span> Campagne acquisition bars/péniches</li>
-                    <li><span class="status"></span> Corriger les pages 404</li>
-                    <li><span class="status"></span> Optimiser le référencement local</li>
+                    <li><span class="status"></span> Audit stratégique et recommandations de développement (à venir)</li>
                 </ul>
             </div>
         </div>
