@@ -45,13 +45,6 @@
             margin-bottom: 15px;
         }
         
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
         .subtitle {
             color: var(--text-light);
             font-size: 1.1rem;
@@ -157,10 +150,67 @@
             font-weight: 600;
         }
         
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+        /* Carousel Netflix style */
+        .carousel-section {
+            margin-top: 40px;
+        }
+        
+        .carousel-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 10px;
+        }
+        
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .carousel-track {
+            display: flex;
+            gap: 15px;
+            padding: 5px;
+        }
+        
+        .carousel-card {
+            flex: 0 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 25px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .carousel-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .carousel-card .label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+        
+        .carousel-card .value {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .carousel-card .value.accent {
+            color: var(--accent);
+        }
+        
+        /* Actions */
+        .actions-section {
+            margin-top: 40px;
         }
         
         .action-card {
@@ -180,31 +230,28 @@
         
         .action-list {
             list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
         }
         
         .action-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 12px 15px;
+            background: var(--bg);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
             font-size: 0.95rem;
         }
         
-        .action-list li:last-child {
-            border-bottom: none;
-        }
-        
         .status {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
+            background: var(--accent);
         }
-        
-        .status.done { background: #10B981; }
-        .status.pending { background: var(--accent); }
-        .status.todo { background: var(--border); }
         
         .update-info {
             text-align: center;
@@ -213,69 +260,16 @@
             font-size: 0.85rem;
         }
         
-        .geo-section {
-            margin-top: 40px;
-        }
-        
-        .geo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-        }
-        
-        .geo-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .geo-card .city {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-        
-        .geo-card .count {
-            color: var(--primary);
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        
-        .geo-card .count.zero {
-            color: var(--accent);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
-        .badge.priority {
-            background: #FEE2E2;
-            color: #DC2626;
-        }
-        
         @media (max-width: 768px) {
             .stat-card.main {
                 grid-column: span 1;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
             }
             
             .stat-value {
                 font-size: 2.5rem;
             }
             
-            .actions-grid {
+            .action-list {
                 grid-template-columns: 1fr;
             }
         }
@@ -306,15 +300,15 @@
             </div>
             
             <div class="stat-card">
-                <div class="stat-label">Abonnés Instagram</div>
-                <div class="stat-value accent" id="instagram-count">49</div>
-                <a href="https://www.instagram.com/derniere_dispo_evenementiel" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">@derniere_dispo_evenementiel</a>
-            </div>
-            
-            <div class="stat-card">
                 <div class="stat-label">Rythme nécessaire</div>
                 <div class="stat-value primary">+64</div>
                 <div style="color: var(--text-light); font-size: 0.9rem;">lieux/mois pour atteindre 1000</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Abonnés Instagram</div>
+                <div class="stat-value accent" id="instagram-count">49</div>
+                <a href="https://www.instagram.com/derniere_dispo_evenementiel" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">@derniere_dispo_evenementiel</a>
             </div>
             
             <div class="stat-card">
@@ -324,62 +318,96 @@
             </div>
         </div>
         
-        <div class="geo-section">
+        <div class="carousel-section">
             <h2 class="section-title">📍 Répartition géographique</h2>
-            <div class="geo-grid">
-                <div class="geo-card">
-                    <div class="city">Paris</div>
-                    <div class="count" id="geo-paris">174</div>
-                </div>
-                <div class="geo-card">
-                    <div class="city">Lyon</div>
-                    <div class="count" id="geo-lyon">30</div>
-                </div>
-                <div class="geo-card">
-                    <div class="city">Marseille</div>
-                    <div class="count" id="geo-marseille">6</div>
-                </div>
-                <div class="geo-card">
-                    <div class="city">Bordeaux</div>
-                    <div class="count" id="geo-bordeaux">6</div>
-                </div>
-                <div class="geo-card">
-                    <div class="city">Chamonix</div>
-                    <div class="count" id="geo-chamonix">5</div>
-                </div>
-                <div class="geo-card">
-                    <div class="city">Autres</div>
-                    <div class="count" id="geo-autres">142</div>
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <div class="label">Paris</div>
+                        <div class="value">174</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Lyon</div>
+                        <div class="value">30</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Marseille</div>
+                        <div class="value accent">6</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Bordeaux</div>
+                        <div class="value accent">6</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Chamonix</div>
+                        <div class="value">5</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Puteaux</div>
+                        <div class="value">3</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Villeurbanne</div>
+                        <div class="value">3</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Autres</div>
+                        <div class="value">136</div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="actions-grid" style="margin-top: 40px;">
-            <div class="action-card">
-                <h3>✅ Réalisé</h3>
-                <ul class="action-list">
-                    <li><span class="status done"></span> Création du dashboard de suivi</li>
-                    <li><span class="status done"></span> Analyse du site actuel</li>
-                    <li><span class="status done"></span> Identification des opportunités</li>
-                </ul>
+        <div class="carousel-section">
+            <h2 class="section-title">🏢 Types de lieux</h2>
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <div class="label">Restaurant</div>
+                        <div class="value">61</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Salle réception</div>
+                        <div class="value">61</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Centre conférence</div>
+                        <div class="value">47</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Hôtel</div>
+                        <div class="value">47</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Bateau</div>
+                        <div class="value">24</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Château</div>
+                        <div class="value">18</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Salle réunion</div>
+                        <div class="value">17</div>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="label">Autre</div>
+                        <div class="value">22</div>
+                    </div>
+                </div>
             </div>
-            
+        </div>
+        
+        <div class="actions-section">
+            <h2 class="section-title">🎯 Prochaines actions</h2>
             <div class="action-card">
-                <h3>🔥 En cours</h3>
                 <ul class="action-list">
-                    <li><span class="status pending"></span> Extraction base prospects (Kactus)</li>
-                    <li><span class="status pending"></span> Audit SEO complet</li>
-                </ul>
-            </div>
-            
-            <div class="action-card">
-                <h3>📋 À faire</h3>
-                <ul class="action-list">
-                    <li><span class="status todo"></span> Cibler Lyon, Marseille, Bordeaux <span class="badge priority">Priorité</span></li>
-                    <li><span class="status todo"></span> Segmenter newsletter par type de lieu</li>
-                    <li><span class="status todo"></span> Corriger les pages 404 (SEO)</li>
-                    <li><span class="status todo"></span> Campagne acquisition bars/péniches</li>
-                    <li><span class="status todo"></span> Optimiser le référencement local</li>
+                    <li><span class="status"></span> Cibler Lyon, Marseille, Bordeaux</li>
+                    <li><span class="status"></span> Extraction base prospects (Kactus)</li>
+                    <li><span class="status"></span> Audit SEO complet</li>
+                    <li><span class="status"></span> Campagne acquisition bars/péniches</li>
+                    <li><span class="status"></span> Corriger les pages 404</li>
+                    <li><span class="status"></span> Optimiser le référencement local</li>
                 </ul>
             </div>
         </div>
