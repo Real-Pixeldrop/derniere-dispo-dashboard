@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dernière Dispo - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card.main {
+            grid-column: span 2;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value.green { color: #00d4ff; }
+        .stat-value.purple { color: #7b2cbf; }
+        .stat-value.orange { color: #ff6b35; }
+        
+        .progress-container {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #8892b0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .action-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .action-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+        
+        .action-list {
+            list-style: none;
+        }
+        
+        .action-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .status.done { background: #00d4ff; }
+        .status.pending { background: #ff6b35; }
+        .status.todo { background: #8892b0; }
+        
+        .update-info {
+            text-align: center;
+            margin-top: 40px;
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+        
+        .geo-section {
+            margin-top: 40px;
+        }
+        
+        .geo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .geo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .geo-card .city {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .geo-card .count {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .stat-card.main {
+                grid-column: span 1;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stat-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dernière Dispo</h1>
+            <p class="subtitle">Dashboard de croissance - Objectif 1000 lieux</p>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card main">
+                <div class="stat-label">Lieux référencés</div>
+                <div class="stat-value green" id="lieux-count">350</div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 35%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>0</span>
+                        <span>Objectif : 1000</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Abonnés Instagram</div>
+                <div class="stat-value purple" id="instagram-count">--</div>
+                <div style="color: #8892b0; font-size: 0.9rem;">@dernieredispo</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Newsletter</div>
+                <div class="stat-value orange">300</div>
+                <div style="color: #8892b0; font-size: 0.9rem;">abonnés</div>
+            </div>
+        </div>
+        
+        <div class="geo-section">
+            <h2 class="section-title">Répartition géographique</h2>
+            <div class="geo-grid">
+                <div class="geo-card">
+                    <div class="city">Paris</div>
+                    <div class="count">~280</div>
+                </div>
+                <div class="geo-card">
+                    <div class="city">Île-de-France</div>
+                    <div class="count">~50</div>
+                </div>
+                <div class="geo-card">
+                    <div class="city">Lyon</div>
+                    <div class="count">0</div>
+                </div>
+                <div class="geo-card">
+                    <div class="city">Marseille</div>
+                    <div class="count">0</div>
+                </div>
+                <div class="geo-card">
+                    <div class="city">Bordeaux</div>
+                    <div class="count">0</div>
+                </div>
+                <div class="geo-card">
+                    <div class="city">Autres</div>
+                    <div class="count">~20</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions-grid" style="margin-top: 40px;">
+            <div class="action-card">
+                <h3>✅ Actions réalisées</h3>
+                <ul class="action-list">
+                    <li><span class="status done"></span> Création du dashboard</li>
+                    <li><span class="status done"></span> Analyse du site actuel</li>
+                    <li><span class="status done"></span> Identification des pages vides (404)</li>
+                </ul>
+            </div>
+            
+            <div class="action-card">
+                <h3>🔥 En cours</h3>
+                <ul class="action-list">
+                    <li><span class="status pending"></span> Scraping Kactus (base prospects)</li>
+                    <li><span class="status pending"></span> Audit SEO complet</li>
+                </ul>
+            </div>
+            
+            <div class="action-card">
+                <h3>📋 À faire</h3>
+                <ul class="action-list">
+                    <li><span class="status todo"></span> Segmenter newsletter par type de lieu</li>
+                    <li><span class="status todo"></span> Cibler les grandes villes (Lyon, Marseille, Bordeaux)</li>
+                    <li><span class="status todo"></span> Corriger les pages 404</li>
+                    <li><span class="status todo"></span> Campagne d'acquisition bars/péniches</li>
+                    <li><span class="status todo"></span> Optimiser le SEO local</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="update-info">
+            Dernière mise à jour : <span id="last-update">5 février 2026</span>
+        </div>
+    </div>
+    
+    <script>
+        // Animation du compteur
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            const range = end - start;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + range * progress);
+                obj.textContent = current;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        // Animation au chargement
+        window.addEventListener('load', () => {
+            animateValue('lieux-count', 0, 350, 1500);
+            
+            // Animation de la barre de progression
+            setTimeout(() => {
+                document.getElementById('progress-fill').style.width = '35%';
+            }, 100);
+        });
+        
+        // Date de mise à jour
+        document.getElementById('last-update').textContent = new Date().toLocaleDateString('fr-FR', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    </script>
+</body>
+</html>
