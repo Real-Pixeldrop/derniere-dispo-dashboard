@@ -284,17 +284,19 @@
 <body>
     <div class="container">
         <header>
-            <img src="https://dernieredispo.com/wp-content/uploads/2025/07/derniere-dispo-1.webp" alt="Dernière Dispo" class="logo">
-            <p class="subtitle">Dashboard de croissance — Objectif 1000 lieux fin 2026</p>
+            <a href="https://dernieredispo.com" target="_blank"><img src="https://dernieredispo.com/wp-content/uploads/2025/07/derniere-dispo-1.webp" alt="Dernière Dispo" class="logo"></a>
+            <p class="subtitle">Dashboard de croissance | Objectif 1000 lieux fin 2026</p>
         </header>
         
         <div class="stats-grid">
             <div class="stat-card main">
                 <div class="stat-label">Lieux référencés</div>
-                <div class="stat-value primary"><span id="lieux-count">363</span> <span style="font-size: 1.5rem; color: var(--accent);">(36.3%)</span></div>
+                <div class="stat-value primary" id="lieux-count">363</div>
                 <div class="progress-container">
                     <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        <div class="progress-fill" id="progress-fill" style="width: 0%">
+                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.3%</span>
+                        </div>
                     </div>
                     <div class="progress-text">
                         <span>Actuel : 363</span>
@@ -306,7 +308,7 @@
             <div class="stat-card">
                 <div class="stat-label">Abonnés Instagram</div>
                 <div class="stat-value accent" id="instagram-count">—</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;">@dernieredispo</div>
+                <a href="https://www.instagram.com/derniere_dispo_evenementiel" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">@derniere_dispo_evenementiel</a>
             </div>
             
             <div class="stat-card">
