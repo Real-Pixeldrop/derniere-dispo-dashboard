@@ -144,11 +144,33 @@
         .chart-bar {
             width: 100%;
             max-width: 50px;
-            background: linear-gradient(180deg, var(--primary), var(--accent));
+            background: var(--accent);
             border-radius: 6px 6px 0 0;
             transition: height 1s ease;
             position: relative;
             min-height: 4px;
+        }
+        
+        .year-separator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            padding: 0 2px;
+        }
+        
+        .year-separator .line {
+            border-left: 2px dashed var(--border);
+            flex: 1;
+            margin-bottom: 6px;
+        }
+        
+        .year-separator .year-label {
+            font-size: 0.65rem;
+            color: var(--text-light);
+            font-weight: 600;
+            white-space: nowrap;
         }
         
         .chart-bar-value {
@@ -638,27 +660,37 @@
         
         // Graphique barres par mois
         const monthlyData = [
-            { label: 'Juil', value: 121 },
-            { label: 'Août', value: 12 },
-            { label: 'Sep', value: 39 },
-            { label: 'Oct', value: 64 },
-            { label: 'Nov', value: 55 },
-            { label: 'Déc', value: 30 },
-            { label: 'Jan', value: 40 },
-            { label: 'Fév', value: 2 }
+            { label: 'Juil', value: 121, year: 2025 },
+            { label: 'Août', value: 12, year: 2025 },
+            { label: 'Sep', value: 39, year: 2025 },
+            { label: 'Oct', value: 64, year: 2025 },
+            { label: 'Nov', value: 55, year: 2025 },
+            { label: 'Déc', value: 30, year: 2025 },
+            { label: 'Jan', value: 40, year: 2026 },
+            { label: 'Fév', value: 2, year: 2026 }
         ];
         
         const maxVal = Math.max(...monthlyData.map(d => d.value));
         const chartEl = document.getElementById('chart-bars');
         
         monthlyData.forEach((d, i) => {
+            // Separateur annee entre dec et jan
+            if (i > 0 && d.year !== monthlyData[i - 1].year) {
+                const sep = document.createElement('div');
+                sep.className = 'year-separator';
+                sep.innerHTML = `<div class="line"></div><div class="year-label">${d.year}</div>`;
+                chartEl.appendChild(sep);
+            }
+            
             const pct = (d.value / maxVal) * 100;
             const group = document.createElement('div');
             group.className = 'chart-bar-group';
+            // Afficher l'annee sous le premier mois
+            const sublabel = i === 0 ? `${d.label}<br><span style="font-size:0.6rem;opacity:0.6;">${d.year}</span>` : d.label;
             group.innerHTML = `
                 <div class="chart-bar-value">${d.value}</div>
                 <div class="chart-bar" style="height: 0%" data-height="${pct}%"></div>
-                <div class="chart-bar-label">${d.label}</div>
+                <div class="chart-bar-label">${sublabel}</div>
             `;
             chartEl.appendChild(group);
         });
