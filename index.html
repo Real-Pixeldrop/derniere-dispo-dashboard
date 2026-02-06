@@ -94,31 +94,37 @@
         
         .carousel-arrow {
             position: absolute;
-            top: 14px;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--primary);
             color: white;
             border: none;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2;
-            opacity: 0.6;
+            opacity: 0.7;
             transition: opacity 0.2s;
+            top: 50%;
+            transform: translateY(-50%);
         }
         
         .carousel-arrow:hover { opacity: 1; }
-        .carousel-arrow.left { left: 14px; }
-        .carousel-arrow.right { right: 14px; }
+        .carousel-arrow.left { left: 12px; }
+        .carousel-arrow.right { right: 12px; }
         .carousel-arrow.hidden { display: none !important; }
         
         @media (max-width: 768px) {
-            .carousel-arrow { display: flex; }
-            .carousel-arrow.hidden { display: none !important; }
+            .carousel-arrow {
+                top: 14px;
+                transform: none;
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
         }
         
         /* Graphique barres */
