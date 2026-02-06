@@ -75,6 +75,114 @@
             grid-column: span 2;
             text-align: center;
             background: linear-gradient(135deg, var(--card-bg) 0%, #F0F4FF 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Carousel carte principale */
+        .main-carousel {
+            display: flex;
+            transition: transform 0.4s ease;
+            width: 200%;
+        }
+        
+        .main-slide {
+            width: 50%;
+            flex-shrink: 0;
+            padding: 10px 0;
+        }
+        
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .carousel-arrow:hover { opacity: 1; }
+        .carousel-arrow.left { left: 12px; }
+        .carousel-arrow.right { right: 12px; }
+        .carousel-arrow.hidden { display: none; }
+        
+        /* Graphique barres */
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 180px;
+            padding-top: 10px;
+        }
+        
+        .chart-bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+        }
+        
+        .chart-bar {
+            width: 100%;
+            max-width: 50px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 6px 6px 0 0;
+            transition: height 1s ease;
+            position: relative;
+            min-height: 4px;
+        }
+        
+        .chart-bar-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        
+        .chart-bar-label {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+        
+        /* Dots indicator */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: background 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background: var(--primary);
         }
         
         .stat-label {
@@ -283,6 +391,21 @@
             .action-list {
                 grid-template-columns: 1fr;
             }
+            
+            .chart-bars {
+                height: 140px;
+                gap: 5px;
+            }
+            
+            .chart-bar {
+                max-width: 35px;
+            }
+            
+            .carousel-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -295,18 +418,39 @@
         
         <div class="stats-grid">
             <div class="stat-card main">
-                <div class="stat-label">Lieux référencés</div>
-                <div class="stat-value primary" id="lieux-count">363</div>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 0%">
-                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.3%</span>
+                <button class="carousel-arrow left hidden" id="arrow-left" onclick="slideMain(0)">‹</button>
+                <button class="carousel-arrow right" id="arrow-right" onclick="slideMain(1)">›</button>
+                
+                <div class="main-carousel" id="main-carousel">
+                    <!-- Slide 1 : Jauge -->
+                    <div class="main-slide">
+                        <div class="stat-label">Lieux référencés</div>
+                        <div class="stat-value primary" id="lieux-count">363</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%">
+                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.3%</span>
+                                </div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Actuel : 363</span>
+                                <span><strong>Objectif : 1000</strong></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="progress-text">
-                        <span>Actuel : 363</span>
-                        <span><strong>Objectif : 1000</strong></span>
+                    
+                    <!-- Slide 2 : Graphique par mois -->
+                    <div class="main-slide">
+                        <div class="stat-label">Lieux ajoutés par mois</div>
+                        <div class="chart-container">
+                            <div class="chart-bars" id="chart-bars"></div>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="carousel-dots">
+                    <div class="carousel-dot active" id="dot-0"></div>
+                    <div class="carousel-dot" id="dot-1"></div>
                 </div>
             </div>
             
@@ -468,6 +612,70 @@
             month: 'long',
             year: 'numeric'
         });
+        
+        // Carousel principale
+        function slideMain(index) {
+            document.getElementById('main-carousel').style.transform = `translateX(-${index * 50}%)`;
+            document.getElementById('arrow-left').classList.toggle('hidden', index === 0);
+            document.getElementById('arrow-right').classList.toggle('hidden', index === 1);
+            document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+        
+        // Swipe support
+        (function() {
+            const el = document.getElementById('main-carousel');
+            let startX = 0;
+            let currentSlide = 0;
+            el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+            el.addEventListener('touchend', e => {
+                const diff = startX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) {
+                    currentSlide = diff > 0 ? 1 : 0;
+                    slideMain(currentSlide);
+                }
+            });
+        })();
+        
+        // Graphique barres par mois
+        const monthlyData = [
+            { label: 'Juil', value: 121 },
+            { label: 'Août', value: 12 },
+            { label: 'Sep', value: 39 },
+            { label: 'Oct', value: 64 },
+            { label: 'Nov', value: 55 },
+            { label: 'Déc', value: 30 },
+            { label: 'Jan', value: 40 },
+            { label: 'Fév', value: 2 }
+        ];
+        
+        const maxVal = Math.max(...monthlyData.map(d => d.value));
+        const chartEl = document.getElementById('chart-bars');
+        
+        monthlyData.forEach((d, i) => {
+            const pct = (d.value / maxVal) * 100;
+            const group = document.createElement('div');
+            group.className = 'chart-bar-group';
+            group.innerHTML = `
+                <div class="chart-bar-value">${d.value}</div>
+                <div class="chart-bar" style="height: 0%" data-height="${pct}%"></div>
+                <div class="chart-bar-label">${d.label}</div>
+            `;
+            chartEl.appendChild(group);
+        });
+        
+        // Animer les barres quand le slide est visible
+        function animateBars() {
+            document.querySelectorAll('.chart-bar').forEach(bar => {
+                bar.style.height = bar.dataset.height;
+            });
+        }
+        
+        // Observer le slide 2 pour animer
+        const observer = new MutationObserver(() => {
+            const transform = document.getElementById('main-carousel').style.transform;
+            if (transform.includes('50')) animateBars();
+        });
+        observer.observe(document.getElementById('main-carousel'), { attributes: true, attributeFilter: ['style'] });
     </script>
 </body>
 </html>
