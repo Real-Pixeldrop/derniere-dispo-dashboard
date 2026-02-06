@@ -691,7 +691,7 @@
             const group = document.createElement('div');
             group.className = 'chart-bar-group';
             // Afficher l'annee sous le premier mois
-            const sublabel = i === 0 ? `${d.label}<br><span style="font-size:0.6rem;opacity:0.6;">${d.year}</span>` : d.label;
+            const sublabel = d.label;
             group.innerHTML = `
                 <div class="chart-bar-value">${d.value}</div>
                 <div class="chart-bar" style="height: 0%" data-height="${pct}%"></div>
