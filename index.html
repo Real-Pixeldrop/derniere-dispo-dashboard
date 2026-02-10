@@ -462,11 +462,11 @@
                         <div class="progress-container">
                             <div class="progress-bar">
                                 <div class="progress-fill" id="progress-fill" style="width: 0%">
-                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.5%</span>
+                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">37.0%</span>
                                 </div>
                             </div>
                             <div class="progress-text">
-                                <span>Actuel : 365</span>
+                                <span>Actuel : 370</span>
                                 <span><strong>Objectif : 1000</strong></span>
                             </div>
                         </div>
@@ -489,7 +489,7 @@
             
             <div class="stat-card">
                 <div class="stat-label">Rythme nécessaire</div>
-                <div class="stat-value primary">+64</div>
+                <div class="stat-value primary">+63</div>
                 <div style="color: var(--text-light); font-size: 0.9rem;">lieux/mois pour atteindre 1000</div>
             </div>
             
@@ -501,8 +501,8 @@
             
             <div class="stat-card">
                 <div class="stat-label">Dernier ajout</div>
-                <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Espace Cinko</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">9 février 2026</div>
+                <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Off Golf</div>
+                <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">10 février 2026</div>
             </div>
             
             <div class="stat-card">
@@ -631,11 +631,11 @@
         
         // Animation au chargement
         window.addEventListener('load', () => {
-            animateValue('lieux-count', 0, 365, 1500);
+            animateValue('lieux-count', 0, 370, 1500);
             
             // Animation de la barre de progression
             setTimeout(() => {
-                document.getElementById('progress-fill').style.width = '36.5%';
+                document.getElementById('progress-fill').style.width = '37.0%';
             }, 300);
         });
         
