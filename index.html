@@ -808,7 +808,7 @@
                 <h2 class="section-title" style="margin-bottom: 0;">🏆 Top lieux les plus vus</h2>
                 <div class="lieux-search-wrapper">
                     <input type="text" class="lieux-search" id="lieux-search" placeholder="Rechercher un lieu...">
-                    <span class="lieux-count" id="lieux-count">366 lieux sur 366</span>
+                    <span class="lieux-count" id="lieux-table-count">366</span>
                 </div>
             </div>
             <div class="lieux-table-wrapper">
@@ -1453,8 +1453,7 @@
             const query = normalizeName(this.value);
             filteredLieux = lieuxWithStats.filter(l => normalizeName(l.name).includes(query));
             sortLieux(currentSort.field);
-            document.getElementById('lieux-count').textContent = 
-                `${filteredLieux.length} lieu${filteredLieux.length > 1 ? 'x' : ''} sur ${allLieux.length}`;
+            document.getElementById('lieux-table-count').textContent = filteredLieux.length;
         });
         
         // Sort on header click
