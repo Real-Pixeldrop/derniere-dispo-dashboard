@@ -6,12 +6,8 @@
     <title>Dernière Dispo - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
             --primary: #3453BF;
             --accent: #E77F74;
@@ -20,43 +16,210 @@
             --text: #1a1a2e;
             --text-light: #6b7280;
             --border: #E5E7EB;
+            --sidebar-bg: #1a1a2e;
+            --sidebar-width: 240px;
+            --sidebar-collapsed: 60px;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             min-height: 100vh;
             color: var(--text);
-            padding: 40px 20px;
+            display: flex;
         }
-        
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            min-height: 65px;
+        }
+
+        .sidebar-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .sidebar-logo-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar.collapsed .sidebar-logo-text { opacity: 0; width: 0; }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            transition: color 0.2s;
+            margin-left: auto;
+        }
+
+        .toggle-btn:hover { color: white; }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-decoration: none;
+            font-size: 0.88rem;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover { background: rgba(255,255,255,0.06); color: #e5e7eb; }
+        .nav-item.active { background: var(--primary); color: white; }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-label { font-weight: 500; transition: opacity 0.2s; }
+        .sidebar.collapsed .nav-label { opacity: 0; }
+        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+
+        .sidebar-footer {
+            padding: 14px 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.72rem;
+            color: #4b5563;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar.collapsed .sidebar-footer { opacity: 0; }
+
+        /* ===== FAB MOBILE ===== */
+        .fab-menu {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 200;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(52, 83, 191, 0.35);
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .fab-menu:active { transform: scale(0.92); }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            min-width: 0;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            padding: 35px 40px;
+            overflow-x: hidden;
+        }
+
+        .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+        .tab { display: none; }
+        .tab.active { display: block; }
+
+        /* ===== DASHBOARD TAB (original content) ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         header {
             text-align: center;
             margin-bottom: 50px;
         }
-        
+
         .logo {
             max-width: 250px;
             margin-bottom: 15px;
         }
-        
+
         .subtitle {
             color: var(--text-light);
             font-size: 1.1rem;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
-        
+
         .stat-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -65,12 +228,12 @@
             border: 1px solid var(--border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .stat-card.main {
             grid-column: span 2;
             text-align: center;
@@ -78,20 +241,19 @@
             position: relative;
             overflow: hidden;
         }
-        
-        /* Carousel carte principale */
+
         .main-carousel {
             display: flex;
             transition: transform 0.4s ease;
             width: 200%;
         }
-        
+
         .main-slide {
             width: 50%;
             flex-shrink: 0;
             padding: 10px 0;
         }
-        
+
         .carousel-arrow {
             position: absolute;
             width: 36px;
@@ -111,29 +273,18 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        
+
         .carousel-arrow:hover { opacity: 1; }
         .carousel-arrow.left { left: 12px; }
         .carousel-arrow.right { right: 12px; }
         .carousel-arrow.hidden { display: none !important; }
-        
-        @media (max-width: 768px) {
-            .carousel-arrow {
-                top: 14px;
-                transform: none;
-                width: 32px;
-                height: 32px;
-                font-size: 1rem;
-            }
-        }
-        
-        /* Graphique barres */
+
         .chart-container {
             max-width: 600px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
+
         .chart-bars {
             display: flex;
             align-items: flex-end;
@@ -141,7 +292,7 @@
             height: 180px;
             padding-top: 10px;
         }
-        
+
         .chart-bar-group {
             flex: 1;
             display: flex;
@@ -150,7 +301,7 @@
             height: 100%;
             justify-content: flex-end;
         }
-        
+
         .chart-bar {
             width: 100%;
             max-width: 50px;
@@ -160,7 +311,7 @@
             position: relative;
             min-height: 4px;
         }
-        
+
         .year-separator {
             display: flex;
             flex-direction: column;
@@ -169,43 +320,42 @@
             height: 100%;
             padding: 0 6px;
         }
-        
+
         .year-separator .line {
             border-left: 2px dashed var(--accent);
             flex: 1;
             margin-bottom: 6px;
             opacity: 0.5;
         }
-        
+
         .year-separator .year-label {
             font-size: 0.7rem;
             color: var(--accent);
             font-weight: 700;
             white-space: nowrap;
         }
-        
+
         .chart-bar-value {
             font-size: 0.75rem;
             font-weight: 600;
             color: var(--primary);
             margin-bottom: 4px;
         }
-        
+
         .chart-bar-label {
             font-size: 0.7rem;
             color: var(--text-light);
             margin-top: 6px;
             font-weight: 500;
         }
-        
-        /* Dots indicator */
+
         .carousel-dots {
             display: flex;
             justify-content: center;
             gap: 8px;
             margin-top: 12px;
         }
-        
+
         .carousel-dot {
             width: 8px;
             height: 8px;
@@ -213,11 +363,11 @@
             background: var(--border);
             transition: background 0.3s;
         }
-        
+
         .carousel-dot.active {
             background: var(--primary);
         }
-        
+
         .stat-label {
             font-size: 0.85rem;
             color: var(--text-light);
@@ -226,23 +376,23 @@
             margin-bottom: 15px;
             font-weight: 500;
         }
-        
+
         .stat-value {
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 10px;
         }
-        
+
         .stat-value.primary { color: var(--primary); }
         .stat-value.accent { color: var(--accent); }
-        
+
         .progress-container {
             margin-top: 20px;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .progress-bar {
             height: 24px;
             background: var(--border);
@@ -250,7 +400,7 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--accent));
@@ -258,23 +408,20 @@
             transition: width 1.5s ease;
             position: relative;
         }
-        
+
         .progress-fill::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shimmer 2s infinite;
         }
-        
+
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        
+
         .progress-text {
             display: flex;
             justify-content: space-between;
@@ -283,19 +430,18 @@
             color: var(--text-light);
             font-weight: 500;
         }
-        
+
         .section-title {
             font-size: 1.3rem;
             margin-bottom: 20px;
             color: var(--text);
             font-weight: 600;
         }
-        
-        /* Carousel Netflix style */
+
         .carousel-section {
             margin-top: 40px;
         }
-        
+
         .carousel-container {
             overflow-x: auto;
             scroll-behavior: smooth;
@@ -304,17 +450,15 @@
             -ms-overflow-style: none;
             padding-bottom: 10px;
         }
-        
-        .carousel-container::-webkit-scrollbar {
-            display: none;
-        }
-        
+
+        .carousel-container::-webkit-scrollbar { display: none; }
+
         .carousel-track {
             display: flex;
             gap: 15px;
             padding: 5px;
         }
-        
+
         .carousel-card {
             flex: 0 0 auto;
             background: var(--card-bg);
@@ -326,34 +470,31 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
+
         .carousel-card:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-        
+
         .carousel-card .label {
             font-weight: 600;
             margin-bottom: 8px;
             color: var(--text);
             font-size: 0.95rem;
         }
-        
+
         .carousel-card .value {
             color: var(--primary);
             font-size: 1.8rem;
             font-weight: 700;
         }
-        
-        .carousel-card .value.accent {
-            color: var(--accent);
-        }
-        
-        /* Actions */
+
+        .carousel-card .value.accent { color: var(--accent); }
+
         .actions-section {
             margin-top: 40px;
         }
-        
+
         .action-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -361,21 +502,21 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
         }
-        
+
         .action-card h3 {
             font-size: 1rem;
             margin-bottom: 15px;
             color: var(--primary);
             font-weight: 600;
         }
-        
+
         .action-list {
             list-style: none;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 12px;
         }
-        
+
         .action-list li {
             padding: 12px 15px;
             background: var(--bg);
@@ -385,7 +526,7 @@
             gap: 12px;
             font-size: 0.95rem;
         }
-        
+
         .status {
             width: 8px;
             height: 8px;
@@ -393,259 +534,656 @@
             flex-shrink: 0;
             background: var(--accent);
         }
-        
+
         .update-info {
             text-align: center;
             margin-top: 40px;
             color: var(--text-light);
             font-size: 0.85rem;
         }
-        
-        /* Desktop: carte principale full width, 4 cartes en dessous */
+
+        /* ===== ANALYTICS TAB ===== */
+        .analytics-header {
+            margin-bottom: 30px;
+        }
+
+        .analytics-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .analytics-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeSlideIn 0.5s ease forwards;
+        }
+
+        .kpi-card:nth-child(1) { animation-delay: 0.1s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.25s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.4s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.55s; }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+        }
+
+        .kpi-icon.blue { background: rgba(52,83,191,0.1); color: var(--primary); }
+        .kpi-icon.coral { background: rgba(231,127,116,0.1); color: var(--accent); }
+        .kpi-icon.green { background: rgba(16,185,129,0.1); color: #10b981; }
+        .kpi-icon.purple { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Pages overview */
+        .pages-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .page-stat {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .page-stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .page-stat-info .page-name {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+
+        .page-stat-info .page-views {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Table */
+        .table-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .table-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within { border-color: var(--primary); }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: var(--text);
+            width: 200px;
+        }
+
+        .search-box input::placeholder { color: var(--text-light); }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+
+        .data-table th:hover { color: var(--primary); }
+
+        .data-table th .sort-icon {
+            display: inline-block;
+            margin-left: 4px;
+            opacity: 0.4;
+            font-size: 0.7rem;
+        }
+
+        .data-table th.sorted .sort-icon { opacity: 1; color: var(--primary); }
+
+        .data-table td {
+            padding: 12px 24px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr {
+            transition: background 0.15s;
+        }
+
+        .data-table tbody tr:hover { background: var(--bg); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+
+        .lieu-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .lieu-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-right: 10px;
+        }
+
+        .lieu-rank.top3 {
+            background: rgba(52,83,191,0.1);
+            color: var(--primary);
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 12px;
+            background: rgba(52,83,191,0.08);
+            color: var(--primary);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .view-link:hover { background: rgba(52,83,191,0.15); }
+
+        .table-footer {
+            padding: 14px 24px;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .no-results {
+            padding: 40px 24px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (min-width: 769px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
-            
             .stat-card.main {
                 grid-column: 1 / -1;
             }
         }
-        
+
+        @media (max-width: 1100px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .pages-overview { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 768px) {
-            .stat-card.main {
-                grid-column: span 1;
+            .sidebar {
+                transform: translateX(-100%);
+                width: var(--sidebar-width);
             }
-            
-            .stat-value {
-                font-size: 2.5rem;
+
+            .sidebar.open { transform: translateX(0); }
+
+            .fab-menu { display: flex; }
+            .sidebar-overlay.open { display: block; }
+
+            .main {
+                margin-left: 0 !important;
+                padding: 25px 16px;
             }
-            
-            .action-list {
-                grid-template-columns: 1fr;
-            }
-            
+
+            .stat-card.main { grid-column: span 1; }
+            .stat-value { font-size: 2.5rem; }
+            .action-list { grid-template-columns: 1fr; }
+
             .chart-bars {
                 height: 140px;
                 gap: 5px;
             }
-            
-            .chart-bar {
-                max-width: 35px;
-            }
-            
+
+            .chart-bar { max-width: 35px; }
+
             .carousel-arrow {
+                top: 14px;
+                transform: none;
                 width: 30px;
                 height: 30px;
                 font-size: 0.9rem;
             }
+
+            .kpi-grid { grid-template-columns: 1fr; }
+            .pages-overview { grid-template-columns: 1fr; }
+
+            .search-box input { width: 140px; }
+
+            .toggle-btn { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <a href="https://dernieredispo.com" target="_blank"><img src="https://dernieredispo.com/wp-content/uploads/2025/07/derniere-dispo-1.webp" alt="Dernière Dispo" class="logo"></a>
-            <p class="subtitle">Dashboard de croissance | Objectif 1000 lieux fin 2026</p>
-        </header>
-        
-        <div class="stats-grid">
-            <div class="stat-card main">
-                <button class="carousel-arrow left hidden" id="arrow-left" onclick="slideMain(0)">‹</button>
-                <button class="carousel-arrow right" id="arrow-right" onclick="slideMain(1)">›</button>
-                
-                <div class="main-carousel" id="main-carousel">
-                    <!-- Slide 1 : Jauge -->
-                    <div class="main-slide">
-                        <div class="stat-label">Lieux référencés</div>
-                        <div class="stat-value primary" id="lieux-count">363</div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progress-fill" style="width: 0%">
-                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.6%</span>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo-icon">D</div>
+            <span class="sidebar-logo-text">DernièreDispo</span>
+            <button class="toggle-btn" onclick="toggleSidebar()" title="Réduire">☰</button>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" onclick="switchTab('dashboard', this)">
+                <span class="nav-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('analytics', this)">
+                <span class="nav-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </span>
+                <span class="nav-label">Analytics</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            Données GA4 · 1 jan – 11 fév 2026
+        </div>
+    </aside>
+
+    <!-- FAB mobile -->
+    <button class="fab-menu" id="fab-menu" onclick="openMobileSidebar()">☰</button>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- Main content -->
+    <div class="main">
+
+        <!-- ==================== DASHBOARD TAB ==================== -->
+        <div class="tab active" id="tab-dashboard">
+            <div class="container">
+                <header>
+                    <a href="https://dernieredispo.com" target="_blank"><img src="https://dernieredispo.com/wp-content/uploads/2025/07/derniere-dispo-1.webp" alt="Dernière Dispo" class="logo"></a>
+                    <p class="subtitle">Dashboard de croissance | Objectif 1000 lieux fin 2026</p>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card main">
+                        <button class="carousel-arrow left hidden" id="arrow-left" onclick="slideMain(0)">‹</button>
+                        <button class="carousel-arrow right" id="arrow-right" onclick="slideMain(1)">›</button>
+
+                        <div class="main-carousel" id="main-carousel">
+                            <!-- Slide 1 : Jauge -->
+                            <div class="main-slide">
+                                <div class="stat-label">Lieux référencés</div>
+                                <div class="stat-value primary" id="lieux-count">363</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progress-fill" style="width: 0%">
+                                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">36.6%</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress-text">
+                                        <span>Actuel : 366</span>
+                                        <span><strong>Objectif : 1000</strong></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="progress-text">
-                                <span>Actuel : 366</span>
-                                <span><strong>Objectif : 1000</strong></span>
+
+                            <!-- Slide 2 : Graphique par mois -->
+                            <div class="main-slide">
+                                <div class="stat-label">Lieux ajoutés par mois</div>
+                                <div class="chart-container">
+                                    <div class="chart-bars" id="chart-bars"></div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="carousel-dots">
+                            <div class="carousel-dot active" id="dot-0"></div>
+                            <div class="carousel-dot" id="dot-1"></div>
+                        </div>
                     </div>
-                    
-                    <!-- Slide 2 : Graphique par mois -->
-                    <div class="main-slide">
-                        <div class="stat-label">Lieux ajoutés par mois</div>
-                        <div class="chart-container">
-                            <div class="chart-bars" id="chart-bars"></div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Rythme nécessaire</div>
+                        <div class="stat-value primary">+63</div>
+                        <div style="color: var(--text-light); font-size: 0.9rem;">lieux/mois pour atteindre 1000</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Abonnés Instagram</div>
+                        <div class="stat-value accent" id="instagram-count">49</div>
+                        <a href="https://www.instagram.com/derniere_dispo_evenementiel" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">@derniere_dispo_evenementiel</a>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Dernier ajout</div>
+                        <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Off Golf</div>
+                        <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">10 février 2026</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Lieu le plus vu</div>
+                        <div class="stat-value primary" style="font-size: 1.5rem;">Rivage Hotel Spa</div>
+                        <div style="color: var(--text-light); font-size: 0.9rem;">145 vues</div>
+                    </div>
+                </div>
+
+                <div class="carousel-section">
+                    <h2 class="section-title">Répartition géographique</h2>
+                    <div class="carousel-container">
+                        <div class="carousel-track">
+                            <div class="carousel-card"><div class="label">Paris</div><div class="value">174</div></div>
+                            <div class="carousel-card"><div class="label">Lyon</div><div class="value">30</div></div>
+                            <div class="carousel-card"><div class="label">Marseille</div><div class="value accent">6</div></div>
+                            <div class="carousel-card"><div class="label">Bordeaux</div><div class="value accent">6</div></div>
+                            <div class="carousel-card"><div class="label">Chamonix</div><div class="value">5</div></div>
+                            <div class="carousel-card"><div class="label">Puteaux</div><div class="value">3</div></div>
+                            <div class="carousel-card"><div class="label">Villeurbanne</div><div class="value">3</div></div>
+                            <div class="carousel-card"><div class="label">Autres</div><div class="value">136</div></div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="carousel-dots">
-                    <div class="carousel-dot active" id="dot-0"></div>
-                    <div class="carousel-dot" id="dot-1"></div>
+
+                <div class="carousel-section">
+                    <h2 class="section-title">Types de lieux</h2>
+                    <div class="carousel-container">
+                        <div class="carousel-track">
+                            <div class="carousel-card"><div class="label">Restaurant</div><div class="value">61</div></div>
+                            <div class="carousel-card"><div class="label">Salle réception</div><div class="value">61</div></div>
+                            <div class="carousel-card"><div class="label">Centre conférence</div><div class="value">47</div></div>
+                            <div class="carousel-card"><div class="label">Hôtel</div><div class="value">47</div></div>
+                            <div class="carousel-card"><div class="label">Bateau</div><div class="value">24</div></div>
+                            <div class="carousel-card"><div class="label">Château</div><div class="value">18</div></div>
+                            <div class="carousel-card"><div class="label">Salle réunion</div><div class="value">17</div></div>
+                            <div class="carousel-card"><div class="label">Autre</div><div class="value">22</div></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">Rythme nécessaire</div>
-                <div class="stat-value primary">+63</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;">lieux/mois pour atteindre 1000</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">Abonnés Instagram</div>
-                <div class="stat-value accent" id="instagram-count">49</div>
-                <a href="https://www.instagram.com/derniere_dispo_evenementiel" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">@derniere_dispo_evenementiel</a>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">Dernier ajout</div>
-                <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Off Golf</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">10 février 2026</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">Lieu le plus vu</div>
-                <div class="stat-value primary" style="font-size: 1.5rem;">Rivage Hotel Spa</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;">145 vues</div>
-            </div>
-        </div>
-        
-        <div class="carousel-section">
-            <h2 class="section-title">Répartition géographique</h2>
-            <div class="carousel-container">
-                <div class="carousel-track">
-                    <div class="carousel-card">
-                        <div class="label">Paris</div>
-                        <div class="value">174</div>
+
+                <div class="actions-section">
+                    <h2 class="section-title">Prochaines actions</h2>
+                    <div class="action-card">
+                        <ul class="action-list">
+                            <li><span class="status"></span> Extraction base prospects (Kactus)</li>
+                            <li><span class="status"></span> Campagne acquisition bars/péniches</li>
+                            <li><span class="status"></span> Audit stratégique et recommandations de développement (à venir)</li>
+                        </ul>
                     </div>
-                    <div class="carousel-card">
-                        <div class="label">Lyon</div>
-                        <div class="value">30</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Marseille</div>
-                        <div class="value accent">6</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Bordeaux</div>
-                        <div class="value accent">6</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Chamonix</div>
-                        <div class="value">5</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Puteaux</div>
-                        <div class="value">3</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Villeurbanne</div>
-                        <div class="value">3</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Autres</div>
-                        <div class="value">136</div>
-                    </div>
+                </div>
+
+                <div class="update-info">
+                    Dernière mise à jour : <span id="last-update"></span>
                 </div>
             </div>
         </div>
-        
-        <div class="carousel-section">
-            <h2 class="section-title">Types de lieux</h2>
-            <div class="carousel-container">
-                <div class="carousel-track">
-                    <div class="carousel-card">
-                        <div class="label">Restaurant</div>
-                        <div class="value">61</div>
+
+        <!-- ==================== ANALYTICS TAB ==================== -->
+        <div class="tab" id="tab-analytics">
+            <div class="analytics-header">
+                <h1>📊 Analytics</h1>
+                <p>Données Google Analytics 4 · 1 janvier – 11 février 2026</p>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon blue">👥</div>
+                    <div class="kpi-value">389</div>
+                    <div class="kpi-label">Visiteurs uniques</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon coral">🔄</div>
+                    <div class="kpi-value">544</div>
+                    <div class="kpi-label">Sessions</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon green">📄</div>
+                    <div class="kpi-value">614</div>
+                    <div class="kpi-label">Pages vues</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon purple">📌</div>
+                    <div class="kpi-value">1.13</div>
+                    <div class="kpi-label">Pages / session</div>
+                </div>
+            </div>
+
+            <!-- Pages principales -->
+            <h2 class="section-title" style="margin-bottom: 15px;">Pages principales</h2>
+            <div class="pages-overview">
+                <div class="page-stat">
+                    <div class="page-stat-icon">🏠</div>
+                    <div class="page-stat-info">
+                        <div class="page-name">Accueil</div>
+                        <div class="page-views">614 vues</div>
                     </div>
-                    <div class="carousel-card">
-                        <div class="label">Salle réception</div>
-                        <div class="value">61</div>
+                </div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">🔑</div>
+                    <div class="page-stat-info">
+                        <div class="page-name">Connexion</div>
+                        <div class="page-views">288 vues</div>
                     </div>
-                    <div class="carousel-card">
-                        <div class="label">Centre conférence</div>
-                        <div class="value">47</div>
+                </div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">📝</div>
+                    <div class="page-stat-info">
+                        <div class="page-name">Inscription</div>
+                        <div class="page-views">265 vues</div>
                     </div>
-                    <div class="carousel-card">
-                        <div class="label">Hôtel</div>
-                        <div class="value">47</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Bateau</div>
-                        <div class="value">24</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Château</div>
-                        <div class="value">18</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Salle réunion</div>
-                        <div class="value">17</div>
-                    </div>
-                    <div class="carousel-card">
-                        <div class="label">Autre</div>
-                        <div class="value">22</div>
+                </div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">🔍</div>
+                    <div class="page-stat-info">
+                        <div class="page-name">Résultats</div>
+                        <div class="page-views">242 vues</div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="actions-section">
-            <h2 class="section-title">Prochaines actions</h2>
-            <div class="action-card">
-                <ul class="action-list">
-                    <li><span class="status"></span> Extraction base prospects (Kactus)</li>
-                    <li><span class="status"></span> Campagne acquisition bars/péniches</li>
-                    <li><span class="status"></span> Audit stratégique et recommandations de développement (à venir)</li>
-                </ul>
+
+            <!-- Tableau top lieux -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>🏆 Top lieux les plus vus</h2>
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="lieu-search" placeholder="Rechercher un lieu..." oninput="filterLieux()">
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="lieux-table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)"># <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(1)">Lieu <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(2)">Vues <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(3)">Visiteurs <span class="sort-icon">↕</span></th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lieux-tbody">
+                        </tbody>
+                    </table>
+                    <div class="no-results" id="no-results" style="display:none;">Aucun lieu trouvé</div>
+                </div>
+                <div class="table-footer">
+                    <span id="result-count">39 lieux</span> · Période : 1 jan – 11 fév 2026
+                </div>
             </div>
         </div>
-        
-        <div class="update-info">
-            Dernière mise à jour : <span id="last-update"></span>
-        </div>
+
     </div>
-    
+
     <script>
-        // Animation du compteur
+        // ===== SIDEBAR =====
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function openMobileSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebar-overlay').classList.add('open');
+        }
+
+        function closeMobileSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebar-overlay').classList.remove('open');
+        }
+
+        // ===== TAB NAVIGATION =====
+        function switchTab(tabId, btn) {
+            // Tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            // Nav items
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            btn.classList.add('active');
+            // Close mobile sidebar
+            closeMobileSidebar();
+
+            // Re-trigger KPI animations when switching to analytics
+            if (tabId === 'analytics') {
+                document.querySelectorAll('.kpi-card').forEach(card => {
+                    card.style.animation = 'none';
+                    card.offsetHeight; // reflow
+                    card.style.animation = '';
+                });
+            }
+        }
+
+        // ===== DASHBOARD SCRIPTS =====
         function animateValue(id, start, end, duration) {
             const obj = document.getElementById(id);
+            if (!obj) return;
             const range = end - start;
             const startTime = performance.now();
-            
             function update(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const current = Math.floor(start + range * progress);
                 obj.textContent = current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
+                if (progress < 1) requestAnimationFrame(update);
             }
-            
             requestAnimationFrame(update);
         }
-        
-        // Animation au chargement
+
         window.addEventListener('load', () => {
             animateValue('lieux-count', 0, 366, 1500);
-            
-            // Animation de la barre de progression
             setTimeout(() => {
                 document.getElementById('progress-fill').style.width = '36.6%';
             }, 300);
         });
-        
-        // Date de mise à jour
+
         document.getElementById('last-update').textContent = new Date().toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
+            day: 'numeric', month: 'long', year: 'numeric'
         });
-        
+
         // Carousel principale
         function slideMain(index) {
             document.getElementById('main-carousel').style.transform = `translateX(-${index * 50}%)`;
@@ -653,12 +1191,11 @@
             document.getElementById('arrow-right').classList.toggle('hidden', index === 1);
             document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === index));
         }
-        
+
         // Swipe support
         (function() {
             const el = document.getElementById('main-carousel');
-            let startX = 0;
-            let currentSlide = 0;
+            let startX = 0, currentSlide = 0;
             el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
             el.addEventListener('touchend', e => {
                 const diff = startX - e.changedTouches[0].clientX;
@@ -668,8 +1205,8 @@
                 }
             });
         })();
-        
-        // Graphique barres par mois
+
+        // Chart bars
         const monthlyData = [
             { label: 'Juil', value: 121, year: 2025 },
             { label: 'Août', value: 12, year: 2025 },
@@ -680,45 +1217,159 @@
             { label: 'Jan', value: 40, year: 2026 },
             { label: 'Fév', value: 2, year: 2026 }
         ];
-        
+
         const maxVal = Math.max(...monthlyData.map(d => d.value));
         const chartEl = document.getElementById('chart-bars');
-        
+
         monthlyData.forEach((d, i) => {
-            // Separateur annee entre dec et jan
             if (i > 0 && d.year !== monthlyData[i - 1].year) {
                 const sep = document.createElement('div');
                 sep.className = 'year-separator';
                 sep.innerHTML = `<div class="line"></div><div class="year-label">${d.year}</div>`;
                 chartEl.appendChild(sep);
             }
-            
             const pct = (d.value / maxVal) * 100;
             const group = document.createElement('div');
             group.className = 'chart-bar-group';
-            // Afficher l'annee sous le premier mois
-            const sublabel = d.label;
             group.innerHTML = `
                 <div class="chart-bar-value">${d.value}</div>
                 <div class="chart-bar" style="height: 0%" data-height="${pct}%"></div>
-                <div class="chart-bar-label">${sublabel}</div>
+                <div class="chart-bar-label">${d.label}</div>
             `;
             chartEl.appendChild(group);
         });
-        
-        // Animer les barres quand le slide est visible
+
         function animateBars() {
             document.querySelectorAll('.chart-bar').forEach(bar => {
                 bar.style.height = bar.dataset.height;
             });
         }
-        
-        // Observer le slide 2 pour animer
+
         const observer = new MutationObserver(() => {
             const transform = document.getElementById('main-carousel').style.transform;
             if (transform.includes('50')) animateBars();
         });
         observer.observe(document.getElementById('main-carousel'), { attributes: true, attributeFilter: ['style'] });
+
+        // ===== ANALYTICS - LIEUX DATA =====
+        const lieuxData = [
+            { name: "Le Magnifique", views: 9, visitors: 7, path: "/lieux/le-magnifique/" },
+            { name: "GoPark", views: 8, visitors: 5, path: "/lieux/gopark/" },
+            { name: "La Bellevilloise", views: 7, visitors: 5, path: "/lieux/la-bellevilloise/" },
+            { name: "La Rotonde Stalingrad", views: 7, visitors: 4, path: "/lieux/la-rotonde-stalingard/" },
+            { name: "Le Lieu Secret", views: 6, visitors: 5, path: "/lieux/le-lieu-secret/" },
+            { name: "L'Entracte Restaurant Réception", views: 6, visitors: 1, path: "/lieux/lentracte-restaurant-reception/" },
+            { name: "Pachamama Paris", views: 6, visitors: 6, path: "/lieux/pachamama-paris/" },
+            { name: "Palais Brongniart", views: 6, visitors: 5, path: "/lieux/palais-brongniart/" },
+            { name: "Public House", views: 6, visitors: 6, path: "/lieux/public-house/" },
+            { name: "NH Paris Gare de l'Est", views: 5, visitors: 3, path: "/lieux/nh-paris-gare-de-lest/" },
+            { name: "Auteuil", views: 4, visitors: 3, path: "/lieux/auteuil/" },
+            { name: "Bar Perché", views: 4, visitors: 4, path: "/lieux/bar-perche/" },
+            { name: "Château du Bois du Rocher", views: 4, visitors: 2, path: "/lieux/chateau-du-bois-du-rocher/" },
+            { name: "Château Saint-Léger", views: 4, visitors: 3, path: "/lieux/chateau-saint-leger/" },
+            { name: "Grand Hotel Les Flamants Roses", views: 4, visitors: 4, path: "/lieux/grand-hotel-les-flamants-roses/" },
+            { name: "La Galerie Bourbon", views: 4, visitors: 3, path: "/lieux/la-galerie-bourbon/" },
+            { name: "La Petite Halle", views: 4, visitors: 3, path: "/lieux/la-petite-halle/" },
+            { name: "Le Montebello", views: 4, visitors: 1, path: "/lieux/le-montebello/" },
+            { name: "Les Pavillons Étoile Presbourg", views: 4, visitors: 3, path: "/lieux/les-pavillons-etoile-presbourg/" },
+            { name: "NH Paris Opéra Faubourg", views: 4, visitors: 3, path: "/lieux/nh-paris-opera-faubourg/" },
+            { name: "River Palace", views: 4, visitors: 4, path: "/lieux/river-palace/" },
+            { name: "Rooftop Grenelle", views: 4, visitors: 3, path: "/lieux/rooftop-grenelle/" },
+            { name: "1K Hotel", views: 3, visitors: 1, path: "/lieux/1k-hotel/" },
+            { name: "Atelier des Abbesses", views: 3, visitors: 2, path: "/lieux/atelier-des-abbesses/" },
+            { name: "Bien Public", views: 3, visitors: 3, path: "/lieux/bien-public/" },
+            { name: "Cosanostra", views: 3, visitors: 2, path: "/lieux/cosanostra/" },
+            { name: "La Salle de Sport Paris Madeleine", views: 3, visitors: 3, path: "/lieux/la-salle-de-sport-paris-madeleine/" },
+            { name: "Le Belvédère", views: 3, visitors: 3, path: "/lieux/le-belvedere/" },
+            { name: "Le Cabaret de la Bohème", views: 3, visitors: 2, path: "/lieux/le-cabaret-de-la-boheme/" },
+            { name: "Le Paris Clandestin", views: 3, visitors: 2, path: "/lieux/le-paris-clandestin-2/" },
+            { name: "L'Hermitage de Moly", views: 3, visitors: 3, path: "/lieux/lhermitage-de-moly/" },
+            { name: "Manoir 92", views: 3, visitors: 2, path: "/lieux/manoir-92/" },
+            { name: "MaPiece Bellecour", views: 3, visitors: 3, path: "/lieux/mapiece-bellecour/" },
+            { name: "Musée Banksy Paris", views: 3, visitors: 2, path: "/lieux/musee-banksy-paris/" },
+            { name: "Red Star FC Inside", views: 3, visitors: 2, path: "/lieux/red-star-fc-inside/" },
+            { name: "Résidence de l'Arsenal Royal", views: 3, visitors: 3, path: "/lieux/residence-de-larsenal-royal/" },
+            { name: "Théâtre du Lido", views: 3, visitors: 1, path: "/lieux/theatre-du-lido/" },
+            { name: "Tout le Monde en Parle", views: 3, visitors: 3, path: "/lieux/tout-le-monde-en-parle/" },
+            { name: "Voyage Samaritaine", views: 3, visitors: 2, path: "/lieux/voyage-samaritaine/" }
+        ];
+
+        // Render table
+        let currentSort = { col: 2, asc: false }; // default: sort by views desc
+
+        function renderTable(data) {
+            const tbody = document.getElementById('lieux-tbody');
+            const noResults = document.getElementById('no-results');
+            const resultCount = document.getElementById('result-count');
+
+            if (data.length === 0) {
+                tbody.innerHTML = '';
+                noResults.style.display = 'block';
+                resultCount.textContent = '0 lieu';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            resultCount.textContent = data.length + ' lieu' + (data.length > 1 ? 'x' : '');
+
+            tbody.innerHTML = data.map((l, i) => `
+                <tr>
+                    <td><span class="lieu-rank${i < 3 ? ' top3' : ''}">${i + 1}</span></td>
+                    <td><span class="lieu-name">${l.name}</span></td>
+                    <td><strong>${l.views}</strong></td>
+                    <td>${l.visitors}</td>
+                    <td><a href="https://dernieredispo.com${l.path}" target="_blank" class="view-link">Voir →</a></td>
+                </tr>
+            `).join('');
+        }
+
+        function sortTable(colIndex) {
+            const isAsc = currentSort.col === colIndex ? !currentSort.asc : false;
+            currentSort = { col: colIndex, asc: isAsc };
+
+            const sorted = [...lieuxData].sort((a, b) => {
+                let valA, valB;
+                switch (colIndex) {
+                    case 0: return 0; // rank = just use current order
+                    case 1: valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
+                        return isAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    case 2: valA = a.views; valB = b.views;
+                        return isAsc ? valA - valB : valB - valA;
+                    case 3: valA = a.visitors; valB = b.visitors;
+                        return isAsc ? valA - valB : valB - valA;
+                }
+                return 0;
+            });
+
+            // Update header styles
+            document.querySelectorAll('.data-table th').forEach((th, i) => {
+                th.classList.toggle('sorted', i === colIndex);
+                const icon = th.querySelector('.sort-icon');
+                if (icon) icon.textContent = (i === colIndex) ? (isAsc ? '↑' : '↓') : '↕';
+            });
+
+            // Apply search filter if any
+            const query = document.getElementById('lieu-search').value.toLowerCase();
+            const filtered = query ? sorted.filter(l => l.name.toLowerCase().includes(query)) : sorted;
+            renderTable(filtered);
+        }
+
+        function filterLieux() {
+            const query = document.getElementById('lieu-search').value.toLowerCase();
+            const sorted = [...lieuxData].sort((a, b) => {
+                switch (currentSort.col) {
+                    case 1: return currentSort.asc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+                    case 2: return currentSort.asc ? a.views - b.views : b.views - a.views;
+                    case 3: return currentSort.asc ? a.visitors - b.visitors : b.visitors - a.visitors;
+                    default: return 0;
+                }
+            });
+            const filtered = query ? sorted.filter(l => l.name.toLowerCase().includes(query)) : sorted;
+            renderTable(filtered);
+        }
+
+        // Initial render
+        renderTable(lieuxData);
     </script>
 </body>
 </html>
