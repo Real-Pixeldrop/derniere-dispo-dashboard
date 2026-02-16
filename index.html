@@ -662,11 +662,11 @@
                         <div class="progress-container">
                             <div class="progress-bar">
                                 <div class="progress-fill" id="progress-fill" style="width: 0%">
-                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">39.0%</span>
+                                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 600; color: white;" id="progress-percent">40.3%</span>
                                 </div>
                             </div>
                             <div class="progress-text">
-                                <span>Actuel : 390</span>
+                                <span>Actuel : 403</span>
                                 <span><strong>Objectif : 1000</strong></span>
                             </div>
                         </div>
@@ -689,7 +689,7 @@
             
             <div class="stat-card">
                 <div class="stat-label">Rythme nécessaire</div>
-                <div class="stat-value primary">+61</div>
+                <div class="stat-value primary">+60</div>
                 <div style="color: var(--text-light); font-size: 0.9rem;">lieux/mois pour atteindre 1000</div>
             </div>
             
@@ -701,8 +701,8 @@
             
             <div class="stat-card">
                 <div class="stat-label">Dernier ajout</div>
-                <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Le Moulin de la Galette de Sannois</div>
-                <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">12 février 2026</div>
+                <div class="stat-value accent" style="font-size: 1.5rem;" id="last-lieu">Le Quai Flottant</div>
+                <div style="color: var(--text-light); font-size: 0.9rem;" id="last-lieu-date">16 février 2026</div>
             </div>
             
             <div class="stat-card">
@@ -857,11 +857,11 @@
         
         // Animation au chargement
         window.addEventListener('load', () => {
-            animateValue('lieux-count', 0, 390, 1500);
+            animateValue('lieux-count', 0, 403, 1500);
             
             // Animation de la barre de progression
             setTimeout(() => {
-                document.getElementById('progress-fill').style.width = '39.0%';
+                document.getElementById('progress-fill').style.width = '40.3%';
             }, 300);
         });
         
